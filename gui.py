@@ -1,6 +1,6 @@
-'''GUI for Backgammon game
-Created April 2017
-@author: Nate Gamble (neg6)
+'''Creates a class for Human backgammon pieces
+Created 2024
+@author: Anni Ainesaz
 '''
 
 from tkinter import *
