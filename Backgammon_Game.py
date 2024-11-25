@@ -3,8 +3,8 @@ Created 2024
 @author: Anni Ainesaz
 '''
 
-from backgammon_black import *
-from backgammon_white import *
+from AI_Player import *
+from Human_Player import *
 import random
 import time
 
