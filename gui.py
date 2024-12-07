@@ -2,10 +2,10 @@
 Created 2024
 @author: Anni Ainesaz
 '''
-
 from tkinter import *
 from AI_Player import *
 from Human_Player import *
+from AI_Heuristic_Player import *
 import random
 from Backgammon_Game import roll
 
@@ -16,7 +16,7 @@ class BackgammonGame:
 
     def __init__(self, window):
         self.turnir = []
-        self.turnir.append(AI_Player())
+        self.turnir.append(AI_Heuristic_Player())
         self.turnir.append(Human_Player())
         self.scores = [0] * len(self.turnir)
 
@@ -305,11 +305,17 @@ class BackgammonGame:
 
         try:
             # Play a move using the black AI logic
+            print("----------before move----------------")
             print("board:", board)
             print("computer pieses: ", self.black.get_pieces())
+            print("Human pieces: ", self.white.get_pieces())
             move = self.black.play(board, computer_roll, "black")
-            print(move)
-            # board, computer_roll = self.status_format()  # Update board and rolls
+            print("chosen moves: ", move)
+            board = self.status_format()
+            print("----------after move----------------")
+            print("board:", board)
+            print("computer pieses: ", self.black.get_pieces())
+            print("Human pieces: ", self.white.get_pieces())
 
             # Check for a win
             if self.black.win():
@@ -325,6 +331,7 @@ class BackgammonGame:
             print(e)
             pass
 
+        self.white.set_pieces(self.black.get_other_pieces())
         # After black's turn, enable the white player's turn
         self.title.set("It's your turn! Roll the dice!")
         self.rollButton.config(state=NORMAL)
