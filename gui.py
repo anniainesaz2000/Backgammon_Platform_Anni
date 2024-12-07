@@ -16,7 +16,7 @@ class BackgammonGame:
 
     def __init__(self, window):
         self.turnir = []
-        self.turnir.append(AI_Heuristic_Player())
+        self.turnir.append(AI_Player())
         self.turnir.append(Human_Player())
         self.scores = [0] * len(self.turnir)
 
