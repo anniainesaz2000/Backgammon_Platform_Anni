@@ -20,7 +20,7 @@ class AI_Player:
     def set_pieces(self, list_of_pieces):
         self._pieces = list_of_pieces
         self.order()
-    
+
     def get_other_pieces(self):
         return self.other_pieces
 
