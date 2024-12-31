@@ -4,9 +4,9 @@ Created 2024
 '''
 from tkinter import *
 from AI_Random_Player import *
-from AI_Heuristic_NoTree import *
 from Human_Player import *
 from AI_Heuristic_Player import *
+from AI_MCT_Player import *
 import random
 from Backgammon_Game import roll
 import threading
@@ -17,7 +17,7 @@ TRI_WIDTH = 50
 class BackgammonGame:
 
     def __init__(self, window):
-        self.turnir = ["AI_Heuristic_Player", "AI_Heuristic_NoTree", "AI_Heuristic_Player"]
+        self.turnir = ["AI_MCT_Player","AI_Heuristic_Player"]
         self.scores = [0] * len(self.turnir)  # Initialize scores for all players
 
         self.window = window
@@ -52,9 +52,15 @@ class BackgammonGame:
 
                 # Update scores based on the result
                 if self.black.win():
-                    self.scores[i] += 1  # Black player wins
+                    if self.white.get_pieces().count(25) == 0:
+                        self.scores[i] += 2  # Black player wins in turkish Mars
+                    else:
+                        self.scores[i] += 1  # Black player wins
                 elif self.white.win():
-                    self.scores[j] += 1  # White player wins
+                    if self.black.get_pieces().count(0) == 0:
+                        self.scores[j] += 2  # White player wins in turkish Mars
+                    else:
+                        self.scores[j] += 1  # White player wins
 
 
         # Print final scores and declare the winner
@@ -70,10 +76,10 @@ class BackgammonGame:
             return Human_Player(color)
         elif str == "AI_Random_Player":
             return AI_Random_Player(color)
-        elif str == "AI_Heuristic_NoTree":
-            return AI_Heuristic_NoTree(color)
         elif str == "AI_Heuristic_Player":
             return AI_Heuristic_Player(color)
+        elif str == "AI_MCT_Player":
+            return AI_MCT_Player(color)
 
     def reset_game_board(self):
         #if an old game was finish, resets the game window: destroys the old one, and creates a new one
@@ -479,7 +485,6 @@ class BackgammonGame:
         """Automates the white player's turn."""
         # Generate dice rolls for the white player
         computer_roll = roll()  # Dice roll
-        print("computer roll: ", computer_roll)
         board = self.status_format()  # Get board status
 
         try:
@@ -487,9 +492,13 @@ class BackgammonGame:
             print("----------white before move----------------")
             print("board:", board)
             print("white pieses: ", self.white.get_pieces())
+            print("num of white pieses:", len(self.white.get_pieces()))
             print("black pieces: ", self.black.get_pieces())
+            print("num of black pieses:", len(self.black.get_pieces()))
+            print("computer roll: ", computer_roll)
             move = self.white.play(board, computer_roll, "white", self.turn_time_ai)
             print("chosen moves: ", move)
+            self.black.set_pieces(self.white.get_other_pieces())
             board = self.status_format()
             print("----------white after move----------------")
             print("board:", board)
@@ -536,9 +545,12 @@ class BackgammonGame:
             print("----------black before move----------------")
             print("board:", board)
             print("black pieses: ", self.black.get_pieces())
+            print("num of black pieses:", len(self.black.get_pieces()))
             print("white pieces: ", self.white.get_pieces())
+            print("num of white pieses:", len(self.white.get_pieces()))
             move = self.black.play(board, computer_roll, "black", self.turn_time_ai)
             print("chosen moves: ", move)
+            self.white.set_pieces(self.black.get_other_pieces())
             board = self.status_format()
             print("----------black after move----------------")
             print("board:", board)
